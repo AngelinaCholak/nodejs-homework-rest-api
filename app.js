@@ -5,8 +5,8 @@ const cors = require("cors");
 
 const contactsRouter = require("./routes/api/contacts");
 const authRoutes = require("./routes/api/users");
+const avatarRoutes = require("./routes/api/avatars");
 
-// const authMiddleware = require("./middlewares/auth");
 
 console.log(authRoutes); 
 const app = express();
@@ -19,6 +19,7 @@ app.use(express.json());
 
 app.use("/api/contacts", contactsRouter);
 app.use("/api/auth", authRoutes);
+app.use("/api/avatar", avatarRoutes);
 
 
 app.use((req, res) => {

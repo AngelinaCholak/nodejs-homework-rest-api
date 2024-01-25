@@ -4,6 +4,6 @@ const AvatarController = require("../../controllers/avatars");
 
 const router = express.Router();
 
-router.get("/avatar", authMiddleware, AvatarController.uploadAvatar);
+router.patch("/avatar", authMiddleware, AvatarController.uploadAvatar);
 
 module.exports = router;

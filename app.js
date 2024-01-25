@@ -19,7 +19,7 @@ app.use(express.json());
 
 app.use("/api/contacts", contactsRouter);
 app.use("/api/auth", authRoutes);
-app.use("/api/avatar", avatarRoutes);
+app.use("/api/users", avatarRoutes);
 
 
 app.use((req, res) => {

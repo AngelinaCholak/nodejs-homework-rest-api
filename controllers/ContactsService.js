@@ -1,29 +1,43 @@
 const ContactsService = require("../models/contacts");
 const HttpError = require("../error/error.js");
 
+
+const { ObjectId } = require("mongoose").Types;
+
 async function getAllContacts(req, res, next) {
   try {
-    const contacts = await ContactsService.find();
-     res.send(contacts);
+    const ownerId = req.user.id;
+    const contacts = await ContactsService.find({
+      ownerId: new ObjectId(ownerId),
+    });
+    res.send(contacts);
   } catch (error) {
     next(error);
   }
-   
-
 }
 
+
+
 async function getContactById(req, res, next) {
-  const { contactId } = req.params;
   try {
+    const { contactId } = req.params;
+    const userId = req.user._id;
     const contact = await ContactsService.findById(contactId);
+
     if (contact === null) {
       throw HttpError(404, `Not found`);
     }
+
+    if (contact.ownerId.toString() !== userId) {
+      throw HttpError(404, `Not found`);
+    }
+
     res.send(contact);
   } catch (error) {
     next(error);
   }
 }
+
 
 async function addNewContact(req, res, next) {
   try {
@@ -52,10 +66,12 @@ async function deleteContact(req, res, next) {
 
 async function updateContactId(req, res, next) {
   const { contactId } = req.params;
+
      const contact = {
        name: req.body.name,
        email: req.body.email,
        phone: req.body.phone,
+       ownerId: req.user.id,
      };
    try {
      const result = await ContactsService.findByIdAndUpdate(
@@ -106,4 +122,5 @@ module.exports = {
   deleteContact,
   updateContactId,
   changeContactFavorite,
+
 };

@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const User = require("../models/users");
 const jwt = require("jsonwebtoken");
 const HttpError = require("../error/error.js");
+const gravatar = require("gravatar");
 
 async function register(req, res, next) {
   const { password, email, subscription } = req.body;
@@ -9,8 +10,14 @@ async function register(req, res, next) {
   try {
     const user = await User.findOne({ email });
     if (user !== null) {
-      throw  HttpError(409, "Email in use");
+      throw HttpError(409, "Email in use");
     }
+
+    const avatarURL = gravatar.url(email, {
+      s: "250",
+      d: "identicon",
+      r: "pg",
+    });
 
     const passwordHash = await bcrypt.hash(password, 10);
 
@@ -18,7 +25,9 @@ async function register(req, res, next) {
       password: passwordHash,
       email,
       subscription,
+      avatarURL, 
     });
+
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
       expiresIn: 60 * 60,
     });
@@ -29,6 +38,7 @@ async function register(req, res, next) {
       user: {
         email: newUser.email,
         subscription: newUser.subscription,
+        avatarURL: newUser.avatarURL, 
       },
     });
   } catch (error) {

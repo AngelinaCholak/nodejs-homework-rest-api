@@ -11,6 +11,8 @@ const avatarRoutes = require("./routes/api/avatars");
 console.log(authRoutes); 
 const app = express();
 
+app.use("/avatars", express.static("public/avatars"));
+
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
 app.use(logger(formatsLogger));

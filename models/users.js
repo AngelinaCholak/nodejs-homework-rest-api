@@ -15,13 +15,13 @@ const userSchema = new mongoose.Schema({
     enum: ["starter", "pro", "business"],
     default: "starter",
   },
-  // avatar: {
-  //   type: String,
-  //   default: null,
-  // },
+  avatar: {
+    type: String,
+    default: null,
+  },
+  avatarURL: String,
 
   token: String,
-  avatarURL: String,
 });
 
 module.exports = mongoose.model("User", userSchema);

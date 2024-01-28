@@ -5,7 +5,7 @@ const cors = require("cors");
 
 const contactsRouter = require("./routes/api/contacts");
 const authRoutes = require("./routes/api/users");
-const avatarRoutes = require("./routes/api/avatars");
+
 
 
 console.log(authRoutes); 
@@ -21,7 +21,7 @@ app.use(express.json());
 
 app.use("/api/contacts", contactsRouter);
 app.use("/api/auth", authRoutes);
-app.use("/api/users", avatarRoutes);
+app.use("/api/users", authRoutes);
 
 
 app.use((req, res) => {

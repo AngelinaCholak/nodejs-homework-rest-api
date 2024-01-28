@@ -2,6 +2,9 @@ const express = require("express");
 const AuthController = require("../../controllers/users");
 const authMiddleware = require("../../middlewares/users");
 
+const AvatarController = require("../../controllers/avatars");
+const uploadMiddleware = require("../../middlewares/upload");
+
 const validate = require("../../middlewares/validate.js");
 const schema = require("../../middlewares/schema/contact.js");
 
@@ -14,5 +17,15 @@ router.post("/login", validate(schema.userSchema), AuthController.login);
 router.get("/logout", authMiddleware, AuthController.logout);
 
 router.get("/current", authMiddleware, AuthController.getCurrent);
+
+router.get("/avatar", authMiddleware, AvatarController.getAvatar);
+
+router.patch(
+  "/avatar",
+  authMiddleware,
+  uploadMiddleware.single("avatar"),
+  AvatarController.uploadAvatar
+);
+
 
 module.exports = router;

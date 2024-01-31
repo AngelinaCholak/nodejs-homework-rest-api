@@ -30,8 +30,9 @@ async function register(req, res, next) {
         to: email,
         from: "Smaluhandelina@gmail.com",
         subject: "Welcome to BookShelf",
-        html: `To confirm your registration please click on the <a href="http:http://localhost:3000/api/users/verify/${verifyToken}">link</a>`,
-        text: `To confirm your registration please open the link http://localhost:3000/api/users//verify/${verifyToken}`,
+        html: `To confirm your registration please click on the 
+        <a href="http://localhost:3000/api/users/verify/${verifyToken}">link</a>`,
+        text: `To confirm your registration please open the link http://localhost:3000/api/users/verify/${verifyToken}`,
       });
 
     const newUser = await User.create({

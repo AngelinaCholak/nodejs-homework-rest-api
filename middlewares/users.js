@@ -22,6 +22,11 @@ function auth(req, res, next) {
       if (!user || user.token !== token) {
         throw  HttpError(401, "Not authorized");
       }
+        if (user.verify === false) {
+          return res
+            .status(401)
+            .send({ message: "Your account is not verified" });
+        }
 
       req.user = decode;
       next();

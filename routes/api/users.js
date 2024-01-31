@@ -26,6 +26,7 @@ router.patch(
   uploadMiddleware.single("avatar"),
   AvatarController.uploadAvatar
 );
+router.get("/verify/:token", AuthController.verify);
 
 
 module.exports = router;

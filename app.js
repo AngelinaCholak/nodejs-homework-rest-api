@@ -6,10 +6,12 @@ const cors = require("cors");
 const contactsRouter = require("./routes/api/contacts");
 const authRoutes = require("./routes/api/users");
 
-// const authMiddleware = require("./middlewares/auth");
+
 
 console.log(authRoutes); 
 const app = express();
+
+app.use("/avatars", express.static("public/avatars"));
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
@@ -18,7 +20,8 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/contacts", contactsRouter);
-app.use("/api/auth", authRoutes);
+
+app.use("/api/users", authRoutes);
 
 
 app.use((req, res) => {

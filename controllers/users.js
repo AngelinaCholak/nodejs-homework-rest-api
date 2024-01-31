@@ -30,16 +30,16 @@ async function register(req, res, next) {
         to: email,
         from: "Smaluhandelina@gmail.com",
         subject: "Welcome to BookShelf",
-        html: `To confirm your registration please click on the <a href="http://localhost:3000/api/auth/verify/${verifyToken}">link</a>`,
-        text: `To confirm your registration please open the link http://localhost:8080/api/auth/verify/${verifyToken}`,
+        html: `To confirm your registration please click on the <a href="http:http://localhost:3000/api/users/verify/${verifyToken}">link</a>`,
+        text: `To confirm your registration please open the link http://localhost:3000/api/users//verify/${verifyToken}`,
       });
 
     const newUser = await User.create({
       password: passwordHash,
       email,
-      // verify: false,
-      // verificationToken: verifyToken,
-      verifyToken,
+      verify: false,
+      verificationToken: verifyToken,
+      // verifyToken,
       subscription,
       avatarURL,
     });
@@ -121,6 +121,8 @@ async function getCurrent(req, res, next) {
 }
 async function verify(req, res, next) {
   const { token } = req.params;
+  // console.log(token);
+  // res.end();
 
   try {
     const user = await User.findOne({ verifyToken: token });

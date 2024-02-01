@@ -24,23 +24,22 @@ async function register(req, res, next) {
 
     const passwordHash = await bcrypt.hash(password, 10);
 
-      const verifyToken = crypto.randomUUID();
+    const verificationToken = crypto.randomUUID();
+    console.log("Generated verifyToken:", verificationToken);
 
       await sendEmail({
         to: email,
         from: "Smaluhandelina@gmail.com",
         subject: "Welcome to BookShelf",
         html: `To confirm your registration please click on the 
-        <a href="http://localhost:3000/api/users/verify/${verifyToken}">link</a>`,
-        text: `To confirm your registration please open the link http://localhost:3000/api/users/verify/${verifyToken}`,
+        <a href="http://localhost:3000/api/users/verify/${verificationToken}">link</a>`,
+        text: `To confirm your registration please open the link http://localhost:3000/api/users/verify/${verificationToken}`,
       });
 
     const newUser = await User.create({
       password: passwordHash,
       email,
-      verify: false,
-      verificationToken: verifyToken,
-      // verifyToken,
+      verificationToken,
       subscription,
       avatarURL,
     });
@@ -122,17 +121,18 @@ async function getCurrent(req, res, next) {
 }
 async function verify(req, res, next) {
   const { token } = req.params;
-  // console.log(token);
-  // res.end();
 
   try {
-    const user = await User.findOne({ verifyToken: token });
+    const user = await User.findOne({ verificationToken: token });
 
     if (user === null) {
       return res.status(404).send({ message: "Not found" });
     }
 
-    await User.findByIdAndUpdate(user._id, { verify: true, verifyToken: null });
+    await User.findByIdAndUpdate(user._id, {
+      verify: true,
+      verificationToken: null,
+    });
 
     res.send({ message: "Email confirm successfully" });
   } catch (error) {
